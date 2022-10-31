@@ -27,3 +27,13 @@ var Gmail = &Server{
 	SMTP:     "smtp.gmail.com",
 	SMTPProt: 587,
 }
+
+const (
+	LF         = "\u000A"               // \n
+	CR         = "\u000D"               // \r
+	CRLf       = "\U000D000A"           // \r\n
+	DOUBLECRLF = "\U000D000A\U000D000A" // \r\n\r\n
+	NULL       = "\u0000"               // null
+	NBSP       = "\u00A0"               // No-Break Space
+	BR         = "<br>"
+)
