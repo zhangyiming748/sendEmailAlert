@@ -28,6 +28,11 @@ func initInMain() {
 }
 
 func Send(info *Info) {
+	defer func() {
+		if err := recover(); err != nil {
+			log.Debug.Printf("发送邮件发生错误:%v\n", err)
+		}
+	}()
 	m := gomail.NewMessage()
 	m.SetHeader("From", info.Form)
 	m.SetHeader("To", info.To...)
