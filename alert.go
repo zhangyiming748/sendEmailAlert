@@ -1,7 +1,7 @@
 package sendEmailAlert
 
 import (
-	"github.com/zhangyiming748/sendEmailAlert/log"
+	"github.com/zhangyiming748/log"
 	"gopkg.in/gomail.v2"
 	"time"
 )
