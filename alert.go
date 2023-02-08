@@ -49,3 +49,29 @@ func Send(info *Info) {
 		log.Debug.Printf("%+v\n", info)
 	}
 }
+func (i *Info) SetSubject(s string) {
+	i.Subject = s
+	return
+}
+func (i Info) GetSubject() string {
+	return i.Subject
+}
+
+func (i *Info) SetText(s string) {
+	i.Text = s
+	return
+}
+func (i Info) GetText() string {
+	return i.Text
+}
+func (i *Info) AddReceiver(s string) {
+	i.To = append(i.To, s)
+	return
+}
+func (i *Info) AddAllReceiver(s []string) {
+	i.To = s
+	return
+}
+func (i Info) GetAllReceiver() []string {
+	return i.To
+}
