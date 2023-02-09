@@ -7,15 +7,15 @@ import (
 )
 
 type Info struct {
-	Form     string
-	To       []string
-	Subject  string
-	Text     string
-	Image    string
-	Host     string
-	Port     int
-	Username string
-	Password string
+	Form     string   `json:"form"`
+	To       []string `json:"to"`
+	Subject  string   `json:"subject"`
+	Text     string   `json:"text"`
+	Image    string   `json:"image"`
+	Host     string   `json:"host"`
+	Port     int      `json:"port"`
+	Username string   `json:"username"`
+	Password string   `json:"password"`
 }
 
 func init() {
@@ -53,17 +53,19 @@ func (i *Info) SetSubject(s string) {
 	i.Subject = s
 	return
 }
-func (i Info) GetSubject() string {
-	return i.Subject
-}
+
+//func (i Info) GetSubject() string {
+//	return i.Subject
+//}
 
 func (i *Info) SetText(s string) {
 	i.Text = s
 	return
 }
-func (i Info) GetText() string {
-	return i.Text
-}
+
+//	func (i Info) GetText() string {
+//		return i.Text
+//	}
 func (i *Info) AddReceiver(s string) {
 	i.To = append(i.To, s)
 	return
@@ -72,6 +74,7 @@ func (i *Info) AddAllReceiver(s []string) {
 	i.To = s
 	return
 }
-func (i Info) GetAllReceiver() []string {
-	return i.To
-}
+
+//func (i Info) GetAllReceiver() []string {
+//	return i.To
+//}
