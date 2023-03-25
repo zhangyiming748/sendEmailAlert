@@ -1,8 +1,12 @@
 package sendEmailAlert
 
 import (
-	"github.com/zhangyiming748/log"
+	"fmt"
+
+	"golang.org/x/exp/slog"
 	"gopkg.in/gomail.v2"
+	"io"
+	"os"
 	"time"
 )
 
@@ -26,11 +30,54 @@ func initInMain() {
 	var cstZone = time.FixedZone("CST", 8*3600) // 东八
 	time.Local = cstZone
 }
+func init() {
+	logLevel := os.Getenv("LEVEL")
+	//var level slog.Level
+	var opt slog.HandlerOptions
+	switch logLevel {
+	case "Debug":
+		opt = slog.HandlerOptions{ // 自定义option
+			AddSource: true,
+			Level:     slog.LevelDebug, // slog 默认日志级别是 info
+		}
+	case "Info":
+		opt = slog.HandlerOptions{ // 自定义option
+			AddSource: true,
+			Level:     slog.LevelInfo, // slog 默认日志级别是 info
+		}
+	case "Warn":
+		opt = slog.HandlerOptions{ // 自定义option
+			AddSource: true,
+			Level:     slog.LevelWarn, // slog 默认日志级别是 info
+		}
+	case "Err":
+		opt = slog.HandlerOptions{ // 自定义option
+			AddSource: true,
+			Level:     slog.LevelError, // slog 默认日志级别是 info
+		}
+	default:
+		slog.Warn("需要正确设置环境变量 Debug,Info,Warn or Err")
+		slog.Info("默认使用Debug等级")
+		opt = slog.HandlerOptions{ // 自定义option
+			AddSource: true,
+			Level:     slog.LevelDebug, // slog 默认日志级别是 info
+		}
+
+	}
+	file := "processImage.log"
+	logf, err := os.OpenFile(file, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0777)
+	if err != nil {
+		panic(err)
+	}
+	//defer logf.Close() //如果不关闭可能造成内存泄露
+	logger := slog.New(opt.NewJSONHandler(io.MultiWriter(logf, os.Stdout)))
+	slog.SetDefault(logger)
+}
 
 func Send(info *Info) {
 	defer func() {
 		if err := recover(); err != nil {
-			log.Debug.Printf("发送邮件发生错误:%v\n", err)
+			slog.Warn("", slog.Any("发送邮件发生错误:%v\n", err))
 		}
 	}()
 	m := gomail.NewMessage()
@@ -46,7 +93,7 @@ func Send(info *Info) {
 	if err := d.DialAndSend(m); err != nil {
 		panic(err)
 	} else {
-		log.Debug.Printf("%+v\n", info)
+		slog.Info("", slog.Any("", fmt.Sprintf("%+v", info)))
 	}
 }
 func (i *Info) SetSubject(s string) {
