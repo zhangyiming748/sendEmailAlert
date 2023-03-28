@@ -64,12 +64,12 @@ func init() {
 		}
 
 	}
-	file := "processImage.log"
+	file := "emailAlert.log"
 	logf, err := os.OpenFile(file, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0777)
 	if err != nil {
 		panic(err)
 	}
-	//defer logf.Close() //如果不关闭可能造成内存泄露
+	defer logf.Close() //如果不关闭可能造成内存泄露
 	logger := slog.New(opt.NewJSONHandler(io.MultiWriter(logf, os.Stdout)))
 	slog.SetDefault(logger)
 }
@@ -77,7 +77,7 @@ func init() {
 func Send(info *Info) {
 	defer func() {
 		if err := recover(); err != nil {
-			slog.Warn("", slog.Any("发送邮件发生错误:%v\n", err))
+			slog.Warn("", slog.Any("发送邮件发生错误:%v\n", fmt.Sprint(err)))
 		}
 	}()
 	m := gomail.NewMessage()
@@ -95,6 +95,7 @@ func Send(info *Info) {
 	} else {
 		slog.Info("", slog.Any("", fmt.Sprintf("%+v", info)))
 	}
+	slog.Info("发送邮件", slog.Any("内容", info))
 }
 func (i *Info) SetSubject(s string) {
 	i.Subject = s
