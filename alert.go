@@ -5,8 +5,6 @@ import (
 
 	"golang.org/x/exp/slog"
 	"gopkg.in/gomail.v2"
-	"io"
-	"os"
 	"time"
 )
 
@@ -23,55 +21,12 @@ type Info struct {
 }
 
 func init() {
-	initInMain()
+	initLocal()
 }
 
-func initInMain() {
+func initLocal() {
 	var cstZone = time.FixedZone("CST", 8*3600) // 东八
 	time.Local = cstZone
-}
-func init() {
-	logLevel := os.Getenv("LEVEL")
-	//var level slog.Level
-	var opt slog.HandlerOptions
-	switch logLevel {
-	case "Debug":
-		opt = slog.HandlerOptions{ // 自定义option
-			AddSource: true,
-			Level:     slog.LevelDebug, // slog 默认日志级别是 info
-		}
-	case "Info":
-		opt = slog.HandlerOptions{ // 自定义option
-			AddSource: true,
-			Level:     slog.LevelInfo, // slog 默认日志级别是 info
-		}
-	case "Warn":
-		opt = slog.HandlerOptions{ // 自定义option
-			AddSource: true,
-			Level:     slog.LevelWarn, // slog 默认日志级别是 info
-		}
-	case "Err":
-		opt = slog.HandlerOptions{ // 自定义option
-			AddSource: true,
-			Level:     slog.LevelError, // slog 默认日志级别是 info
-		}
-	default:
-		slog.Warn("需要正确设置环境变量 Debug,Info,Warn or Err")
-		slog.Info("默认使用Debug等级")
-		opt = slog.HandlerOptions{ // 自定义option
-			AddSource: true,
-			Level:     slog.LevelDebug, // slog 默认日志级别是 info
-		}
-
-	}
-	file := "emailAlert.log"
-	logf, err := os.OpenFile(file, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0777)
-	if err != nil {
-		panic(err)
-	}
-	defer logf.Close() //如果不关闭可能造成内存泄露
-	logger := slog.New(opt.NewJSONHandler(io.MultiWriter(logf, os.Stdout)))
-	slog.SetDefault(logger)
 }
 
 func Send(info *Info) {
@@ -92,37 +47,35 @@ func Send(info *Info) {
 	d := gomail.NewDialer(info.Host, info.Port, info.Username, info.Password)
 	if err := d.DialAndSend(m); err != nil {
 		panic(err)
-	} else {
-		slog.Info("", slog.Any("", fmt.Sprintf("%+v", info)))
 	}
 	slog.Info("发送邮件", slog.Any("内容", info))
 }
+func (i *Info) SetFrom(s string) {
+	i.Form = s
+}
+func (i *Info) SetTo(s []string) {
+	i.To = s
+}
 func (i *Info) SetSubject(s string) {
 	i.Subject = s
-	return
 }
-
-//func (i Info) GetSubject() string {
-//	return i.Subject
-//}
 
 func (i *Info) SetText(s string) {
 	i.Text = s
-	return
 }
 
-//	func (i Info) GetText() string {
-//		return i.Text
-//	}
-func (i *Info) AddReceiver(s string) {
-	i.To = append(i.To, s)
-	return
+func (i *Info) SetImage(s string) {
+	i.Image = s
 }
-func (i *Info) AddAllReceiver(s []string) {
-	i.To = s
-	return
+func (i *Info) SetHost(s string) {
+	i.Host = s
 }
-
-//func (i Info) GetAllReceiver() []string {
-//	return i.To
-//}
+func (i *Info) SetPort(n int) {
+	i.Port = n
+}
+func (i *Info) SetUsername(s string) {
+	i.Username = s
+}
+func (i *Info) SetPassword(s string) {
+	i.Password = s
+}
