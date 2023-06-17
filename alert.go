@@ -2,6 +2,7 @@ package sendEmailAlert
 
 import (
 	"fmt"
+	"strings"
 
 	"golang.org/x/exp/slog"
 	"gopkg.in/gomail.v2"
@@ -62,6 +63,9 @@ func (i *Info) SetSubject(s string) {
 
 func (i *Info) SetText(s string) {
 	i.Text = s
+}
+func (i *Info) AppendText(s string) {
+	i.Text = strings.Join([]string{i.Text, s}, "<br>")
 }
 
 func (i *Info) SetImage(s string) {
