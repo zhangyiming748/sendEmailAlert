@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"strings"
 
-	"golang.org/x/exp/slog"
 	"gopkg.in/gomail.v2"
+	"log/slog"
 	"time"
 )
 
