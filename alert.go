@@ -1,11 +1,9 @@
 package sendEmailAlert
 
 import (
-	"fmt"
-	"strings"
-
 	"gopkg.in/gomail.v2"
 	"log/slog"
+	"strings"
 	"time"
 )
 
@@ -33,7 +31,7 @@ func initLocal() {
 func Send(info *Info) {
 	defer func() {
 		if err := recover(); err != nil {
-			slog.Warn("", slog.Any("发送邮件发生错误:%v\n", fmt.Sprint(err)))
+			slog.Warn("发送邮件发生错误", slog.Any("错误原文", err))
 		}
 	}()
 	m := gomail.NewMessage()
@@ -51,12 +49,15 @@ func Send(info *Info) {
 	}
 	slog.Info("发送邮件", slog.Any("内容", info))
 }
+
 func (i *Info) SetFrom(s string) {
 	i.Form = s
 }
+
 func (i *Info) SetTo(s []string) {
 	i.To = s
 }
+
 func (i *Info) SetSubject(s string) {
 	i.Subject = s
 }
@@ -64,6 +65,11 @@ func (i *Info) SetSubject(s string) {
 func (i *Info) SetText(s string) {
 	i.Text = s
 }
+
+/*
+追加正文文本 已经添加了换行
+*/
+
 func (i *Info) AppendText(s string) {
 	i.Text = strings.Join([]string{i.Text, s}, "<br>")
 }
@@ -71,15 +77,19 @@ func (i *Info) AppendText(s string) {
 func (i *Info) SetImage(s string) {
 	i.Image = s
 }
+
 func (i *Info) SetHost(s string) {
 	i.Host = s
 }
+
 func (i *Info) SetPort(n int) {
 	i.Port = n
 }
+
 func (i *Info) SetUsername(s string) {
 	i.Username = s
 }
+
 func (i *Info) SetPassword(s string) {
 	i.Password = s
 }
