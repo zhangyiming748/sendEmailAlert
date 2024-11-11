@@ -24,4 +24,4 @@ jobs:
       - name: Run Go test
         env:
           PASSWD: ${{ secrets.PASSWORD }}
-        run: go test -v -run TestSend --timeout 5h59m -args ${{ secrets.PASSWORD }}
+        run: go test -v -run TestSend --timeout 5h59m

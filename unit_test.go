@@ -1,20 +1,16 @@
 package sendEmailAlert
 
 import (
-	"fmt"
 	"os"
 	"testing"
+	"time"
 )
 
 // go test -v -run  TestSend --timeout 5h59m -args ${{ secrets.PASSWORD }}
 // args 从第五个参数开始
 func TestSend(t *testing.T) {
 	p := os.Getenv("PASSWD")
-	fmt.Println("$PASSWD", p)
 	args := os.Args
-	for i, v := range args {
-		t.Logf("第%d个参数:%s\n", i, v)
-	}
 	info := new(Info)
 	info.SetFrom("1914301892@qq.com") //${{ secrets.FROM }}
 	tos := []string{
@@ -34,7 +30,8 @@ func TestSend(t *testing.T) {
 	info.SetHost(QQ.SMTP)
 	info.SetPort(QQ.SMTPProt)
 	info.SetUsername("1914301892@qq.com") //${{ secrets.FROM }}
-	info.SetPassword(args[5])             //${{ secrets.PASSWORD }}
+	info.SetPassword(p)                   //${{ secrets.PASSWORD }}
+	info.AppendText(time.Now().String())
 	status := info.Send()
 	t.Log(status)
 	t.Log(args)
