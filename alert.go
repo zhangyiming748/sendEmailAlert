@@ -1,8 +1,8 @@
 package sendEmailAlert
 
 import (
+	"fmt"
 	"gopkg.in/gomail.v2"
-	"log/slog"
 	"strings"
 	"time"
 )
@@ -28,10 +28,12 @@ func initLocal() {
 	time.Local = cstZone
 }
 
-func Send(info *Info) {
+func Send(info *Info) (status string) {
 	defer func() {
 		if err := recover(); err != nil {
-			slog.Warn("发送邮件发生错误", slog.Any("错误原文", err))
+			status = fmt.Sprintf("邮件发送失败%+v", err)
+		} else {
+			status = fmt.Sprintf("邮件发送成功%+v", &info)
 		}
 	}()
 	m := gomail.NewMessage()
@@ -41,13 +43,13 @@ func Send(info *Info) {
 	m.SetHeader("Subject", info.Subject)
 	m.SetBody("text/html", info.Text)
 	if info.Image != "" {
-		m.Attach("/home/Alex/lolcat.jpg")
+		m.Attach(info.Image)
 	}
 	d := gomail.NewDialer(info.Host, info.Port, info.Username, info.Password)
 	if err := d.DialAndSend(m); err != nil {
 		panic(err)
 	}
-	slog.Info("发送邮件", slog.Any("内容", info))
+	return status
 }
 
 func (i *Info) SetFrom(s string) {

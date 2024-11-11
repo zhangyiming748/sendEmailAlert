@@ -10,7 +10,7 @@ type Server struct {
 var QQ = &Server{
 	POP3:     "pop.qq.com",
 	POP3Port: 995,
-	SMTP:     "smtp.qq.cocm",
+	SMTP:     "smtp.qq.com",
 	SMTPProt: 465, //587
 }
 
