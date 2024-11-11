@@ -10,7 +10,6 @@ import (
 // args 从第五个参数开始
 func TestSend(t *testing.T) {
 	p := os.Getenv("PASSWD")
-	args := os.Args
 	info := new(Info)
 	info.SetFrom("1914301892@qq.com") //${{ secrets.FROM }}
 	tos := []string{
@@ -34,5 +33,4 @@ func TestSend(t *testing.T) {
 	info.AppendText(time.Now().String())
 	status := info.Send()
 	t.Log(status)
-	t.Log(args)
 }
