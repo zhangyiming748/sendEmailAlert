@@ -21,5 +21,7 @@ jobs:
         with:
           go-version: 1.23.3  # 这里替换为你项目实际使用的Go版本
 
-      - name: Run Go tests
+      - name: Run Go test
+        env:
+          PASSWD: ${{ secrets.PASSWORD }}
         run: go test -v -run TestSend --timeout 5h59m -args ${{ secrets.PASSWORD }}
