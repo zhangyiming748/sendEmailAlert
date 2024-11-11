@@ -33,7 +33,7 @@ func Send(info *Info) (status string) {
 		if err := recover(); err != nil {
 			status = fmt.Sprintf("邮件发送失败%+v", err)
 		} else {
-			status = fmt.Sprintf("邮件发送成功%+v", &info)
+			status = fmt.Sprintf("邮件发送成功%+v", info)
 		}
 	}()
 	m := gomail.NewMessage()
