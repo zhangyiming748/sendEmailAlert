@@ -16,6 +16,14 @@ func TestSend(t *testing.T) {
 	info.SetFrom("1914301892@qq.com") //${{ secrets.FROM }}
 	tos := []string{
 		"578779391@qq.com",
+		"2352103020@qq.com",
+		"zhangyiming748@qq.com",
+		"zhangyiming7480@qq.com",
+		"zhangyiming748@gmail.com",
+		"zhangyiming748@protonmail.com",
+		"zhangyiming748@outlook.com",
+		"18904892728@163.com",
+		"18904892728@189.cn",
 	}
 	info.SetTo(tos)
 	info.SetSubject("保活")
