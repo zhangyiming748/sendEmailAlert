@@ -24,5 +24,6 @@ func TestSend(t *testing.T) {
 	info.SetPort(QQ.SMTPProt)
 	info.SetUsername(args[5]) //${{ secrets.FROM }}
 	info.SetPassword(args[9]) //${{ secrets.PASSWORD }}
-	info.Send()
+	status := info.Send()
+	t.Log(status)
 }
