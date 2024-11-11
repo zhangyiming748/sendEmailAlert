@@ -28,24 +28,24 @@ func initLocal() {
 	time.Local = cstZone
 }
 
-func Send(info *Info) (status string) {
+func (i *Info) Send() (status string) {
 	defer func() {
 		if err := recover(); err != nil {
 			status = fmt.Sprintf("邮件发送失败%+v", err)
 		} else {
-			status = fmt.Sprintf("邮件发送成功%+v", info)
+			status = fmt.Sprintf("邮件发送成功%+v", i)
 		}
 	}()
 	m := gomail.NewMessage()
-	m.SetHeader("From", info.Form)
-	m.SetHeader("To", info.To...)
+	m.SetHeader("From", i.Form)
+	m.SetHeader("To", i.To...)
 	//m.SetAddressHeader("Cc", "dan@example.com", "Dan")
-	m.SetHeader("Subject", info.Subject)
-	m.SetBody("text/html", info.Text)
-	if info.Image != "" {
-		m.Attach(info.Image)
+	m.SetHeader("Subject", i.Subject)
+	m.SetBody("text/html", i.Text)
+	if i.Image != "" {
+		m.Attach(i.Image)
 	}
-	d := gomail.NewDialer(info.Host, info.Port, info.Username, info.Password)
+	d := gomail.NewDialer(i.Host, i.Port, i.Username, i.Password)
 	if err := d.DialAndSend(m); err != nil {
 		panic(err)
 	}
