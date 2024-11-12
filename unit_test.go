@@ -22,6 +22,7 @@ func TestSend(t *testing.T) {
 		"zhangyiming748@outlook.com",
 		"18904892728@163.com",
 		"18904892728@189.cn",
+		"zhangjializhangjiali@petalmail.com",
 	}
 	info.SetTo(tos)
 	info.SetSubject("保活")
